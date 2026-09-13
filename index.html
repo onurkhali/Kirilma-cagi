@@ -251,6 +251,9 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
 }
 </style>
 
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111827">
 </head>
 <body>
 <div class="container">
@@ -3390,5 +3393,15 @@ setTimeout(()=>window.renderPassiveSkills&&window.renderPassiveSkills(),0);
 })();
 </script>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js', {scope: './'}).catch(function (err) {
+      console.error('PWA service worker kaydı başarısız:', err);
+    });
+  });
+}
+</script>
 </body>
 </html>
