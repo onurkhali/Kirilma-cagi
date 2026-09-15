@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kirilma-v7';
+const CACHE_NAME = 'kirilma-v8';
 const APP_FILES = [
   './',
   './index.html',
