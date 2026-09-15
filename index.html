@@ -411,6 +411,47 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
 }
 .character-icon-glyph{display:block;line-height:1;filter:none!important}
 .knight-armor-icon{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.character-spark-zone{
+  position:absolute;
+  inset:0;
+  overflow:visible;
+  pointer-events:none;
+  z-index:6;
+}
+.character-spark{
+  position:absolute;
+  left:var(--spark-x,50%);
+  bottom:12%;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:var(--spark-color,#bdc3c7);
+  box-shadow:0 0 5px var(--spark-color,#bdc3c7);
+  opacity:0;
+  transform:translate(-50%,0);
+  animation:characterSparkRise var(--spark-dur,1.9s) linear var(--spark-delay,0s) infinite;
+  will-change:transform,opacity;
+}
+@keyframes characterSparkRise{
+  0%{opacity:0;transform:translate(-50%,0) scale(.55)}
+  16%{opacity:.9}
+  100%{opacity:0;transform:translate(calc(-50% + var(--spark-drift,0px)),var(--spark-rise,-32px)) scale(1.15)}
+}
+.character-rarity-0 .character-spark-zone{display:none}
+.character-rarity-1{--spark-color:#2ecc71}
+.character-rarity-1 .character-spark{animation-duration:2.35s}
+.character-rarity-1 .character-spark:nth-child(n+3){display:none}
+.character-rarity-2{--spark-color:#3498db}
+.character-rarity-2 .character-spark{animation-duration:2.1s}
+.character-rarity-2 .character-spark:nth-child(n+5){display:none}
+.character-rarity-3{--spark-color:#9b59b6}
+.character-rarity-3 .character-spark{animation-duration:1.8s}
+.character-rarity-3 .character-spark:nth-child(n+7){display:none}
+.character-rarity-4{--spark-color:#e67e22}
+.character-rarity-4 .character-spark{animation-duration:1.55s}
+.character-rarity-4 .character-spark:nth-child(n+10){display:none}
+.character-rarity-5{--spark-color:#f1948a}
+.character-rarity-5 .character-spark{animation-duration:1.3s}
 .character-equip-label{
   position:static;
   left:auto;
@@ -436,27 +477,7 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
 #equip-slot-weapon{grid-area:silah}
 #equip-slot-ring{grid-area:yuzuk}
 #equip-slot-boots{grid-area:bot}
-#equip-slot-armor{
-  position:absolute;
-  left:50%;
-  top:43%;
-  width:92px;
-  height:84px;
-  inset:auto;
-  z-index:6;
-  transform:translateX(-50%) translateZ(24px);
-}
-#equip-slot-armor .character-equip-icon{
-  width:58px;
-  height:50px;
-  flex-basis:50px;
-  font-size:38px;
-}
-#equip-slot-armor .knight-armor-icon{
-  width:50px;
-  height:50px;
-  display:block;
-}
+#equip-slot-armor{grid-area:zirh}
 #equip-slot-amulet .character-equip-icon,
 #equip-slot-ring .character-equip-icon{font-size:25px}
 
@@ -478,16 +499,8 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
   .character-equip-slot{width:80px;height:66px;gap:2px}
   .character-slot-title{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
   .character-equip-icon{width:42px;height:38px;flex-basis:38px;font-size:25px}
+  .knight-armor-icon{width:38px;height:38px}
   .character-equip-label{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
-  #equip-slot-armor{
-    left:50%;
-    top:43%;
-    width:86px;
-    height:70px;
-    transform:translateX(-50%) translateZ(24px);
-  }
-  #equip-slot-armor .character-equip-icon{width:46px;height:42px;flex-basis:42px}
-  #equip-slot-armor .knight-armor-icon{width:42px;height:42px}
 }
 </style>
 
@@ -4857,5 +4870,3 @@ window.floatCombatText=function(text,type,nearEnemy=true,source,isCrit){
 };
 })();
 </script>
-
-
