@@ -1,10 +1,11 @@
-const CACHE_NAME = 'kirilma-v3';
+const CACHE_NAME = 'kirilma-v4';
 const APP_FILES = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './char_base.png'
 ];
 
 self.addEventListener('install', event => {
