@@ -258,14 +258,87 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
 <style id="KRILMA_CHARACTER_V17_6_REWORK">
-/* v17.6 — KARAKTER EKRANI GÖRSEL DÜZENLEME: kutusuz slotlar + temiz yerleşim */
-#character-stage{width:min(88vw,390px);height:min(118vw,500px);min-height:410px;overflow:hidden}
-#char-base-slot{left:50%;top:53%;width:58%;height:82%;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:transparent;font-size:0;transform:translate(-50%,-50%) translateZ(1px);pointer-events:none;z-index:1;display:flex;align-items:center;justify-content:center}
+/* Karakter ekranı: tekilleştirilmiş yerleşim ve görsel katmanları. */
+#character-stage{
+  position:relative;
+  display:grid;
+  width:min(88vw,390px);
+  height:min(118vw,500px);
+  min-height:410px;
+  margin:0 auto;
+  border:1px solid #344054;
+  border-radius:14px;
+  background:linear-gradient(165deg,#171d28 0%,#0d1118 58%,#080b10 100%);
+  box-shadow:0 14px 30px rgba(0,0,0,.38),inset 0 0 35px rgba(255,255,255,.025);
+  transform-style:preserve-3d;
+  transition:transform .16s ease-out,box-shadow .16s ease-out;
+  overflow:visible;
+  user-select:none;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  grid-template-areas:
+    ". kask ."
+    "yuzuk kolye ."
+    "eldiven zirh silah"
+    ". bot ." ;
+  column-gap:0;
+  row-gap:24px;
+  align-items:center;
+  justify-items:center;
+  padding:12px 6px;
+  box-sizing:border-box;
+}
+#character-stage.is-tilting{
+  transition:none;
+  box-shadow:0 18px 36px rgba(0,0,0,.45),inset 0 0 35px rgba(255,255,255,.035);
+}
+#char-base-slot{
+  position:absolute;
+  left:50%;
+  top:53%;
+  width:58%;
+  height:82%;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:transparent;
+  font-size:0;
+  transform:translate(-50%,-50%) translateZ(1px);
+  pointer-events:none;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+}
 #char-base-slot::after{display:none!important;content:none!important}
-#char-base-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;position:relative;z-index:1}
-#char-base-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;line-height:1.4;max-width:90%;color:#5f6e82;font-size:11px;letter-spacing:.3px;z-index:1}
+#char-base-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  position:relative;
+  z-index:1;
+}
+#char-base-fallback{
+  display:none;
+  position:absolute;
+  inset:0;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  line-height:1.4;
+  max-width:90%;
+  color:#5f6e82;
+  font-size:11px;
+  letter-spacing:.3px;
+  z-index:1;
+}
 #char-base-slot.image-failed #char-base-image{display:none}
 #char-base-slot.image-failed #char-base-fallback{display:flex}
+
 .silhouette-head{position:absolute;left:50%;top:2%;width:22%;aspect-ratio:1;border-radius:50%;background:#6f7b8d;transform:translateX(-50%);box-shadow:0 0 16px rgba(120,135,155,.16)}
 .silhouette-body{position:absolute;left:50%;top:18%;width:44%;height:48%;background:linear-gradient(180deg,#596679,#303b4b);border-radius:35% 35% 22% 22%;transform:translateX(-50%);clip-path:polygon(20% 0,80% 0,100% 16%,78% 72%,66% 100%,34% 100%,22% 72%,0 16%)}
 .silhouette-arm{position:absolute;top:21%;width:15%;height:43%;background:#4b5869;border-radius:999px;transform-origin:50% 8%}
@@ -274,25 +347,148 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
 .silhouette-leg{position:absolute;top:60%;width:17%;height:39%;background:#465365;border-radius:0 0 30px 30px;transform-origin:50% 0}
 .silhouette-leg-left{left:33%;transform:rotate(2deg)}
 .silhouette-leg-right{right:33%;transform:rotate(-2deg)}
-.character-equip-slot{width:88px;height:78px;border:0!important;background:transparent!important;border-radius:0!important;box-shadow:none!important;overflow:visible;display:block;transform:translateZ(22px);}
+
+.character-equip-slot{
+  position:relative;
+  z-index:5;
+  inset:auto;
+  width:88px;
+  height:80px;
+  margin:0;
+  padding:0;
+  border:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  box-sizing:border-box;
+  cursor:pointer;
+  transform:translateZ(22px);
+  transition:transform .14s ease,opacity .18s ease;
+  gap:4px;
+  align-self:center;
+  justify-self:center;
+}
 .character-equip-slot:active{transform:translateZ(22px) scale(.96)}
-.character-slot-title{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:9px!important;line-height:12px!important;font-weight:700;color:#aeb8c5;white-space:nowrap;pointer-events:none;z-index:8}
-.character-equip-icon{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:52px;height:48px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible;display:flex;align-items:center;justify-content:center;line-height:1;font-size:34px;z-index:5}
-.character-icon-glyph{display:block;line-height:1;filter:none!important}.knight-armor-icon{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
-.character-equip-label{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font-size:9px!important;line-height:12px!important;color:#8793a3;white-space:nowrap;pointer-events:none;z-index:8}
+.character-slot-title{
+  position:static;
+  width:100%;
+  height:12px;
+  margin:0;
+  flex:0 0 12px;
+  transform:none;
+  font-size:9px!important;
+  line-height:12px!important;
+  font-weight:700;
+  color:#aeb8c5;
+  text-align:center;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.character-equip-icon{
+  position:relative;
+  left:auto;
+  top:auto;
+  transform:none;
+  width:52px;
+  height:46px;
+  margin:0;
+  flex:0 0 46px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-size:34px;
+  z-index:5;
+}
+.character-icon-glyph{display:block;line-height:1;filter:none!important}
+.knight-armor-icon{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.character-equip-label{
+  position:static;
+  left:auto;
+  bottom:auto;
+  transform:none;
+  width:100%;
+  height:12px;
+  margin:0;
+  flex:0 0 12px;
+  font-size:9px!important;
+  line-height:12px!important;
+  color:#8793a3;
+  text-align:center;
+  white-space:nowrap;
+  pointer-events:none;
+}
 .character-equip-slot.empty .character-equip-icon{opacity:.18!important;filter:grayscale(1)!important}
 .character-equip-slot:not(.empty) .character-equip-label{color:#aeb8c5}
-#equip-slot-helmet{left:50%;top:7%;transform:translateX(-50%) translateZ(22px)}
-#equip-slot-amulet{left:50%;top:22%;width:78px;height:70px;transform:translateX(-50%) translateZ(28px)}
-#equip-slot-amulet .character-equip-icon{top:16px;font-size:25px}
-#equip-slot-armor{left:50%;top:43%;width:92px;height:82px;transform:translateX(-50%) translateZ(24px)}
-#equip-slot-armor .character-equip-icon{top:17px;font-size:38px}
-#equip-slot-weapon{right:4%;top:35%;transform:translateZ(22px)}
-#equip-slot-gloves{left:4%;top:35%;transform:translateZ(22px)}
-#equip-slot-boots{left:50%;bottom:6%;transform:translateX(-50%) translateZ(22px)}
-#equip-slot-ring{left:4%;top:57%;right:auto;bottom:auto;width:74px;height:68px;transform:translateZ(30px)}
-#equip-slot-ring .character-equip-icon{top:15px;font-size:25px}
-@media(max-width:390px){#character-stage{width:88vw;height:118vw;min-height:390px}.character-equip-slot{width:80px;height:72px}.character-equip-icon{width:48px;height:46px;font-size:31px}.character-slot-title{font-size:8px!important}.character-equip-label{font-size:8px!important}#equip-slot-armor{width:86px;height:78px}#equip-slot-armor .character-equip-icon{font-size:35px}.knight-armor-icon{width:42px;height:42px}#equip-slot-amulet{width:72px;height:66px}#equip-slot-ring{width:68px;height:64px}}
+
+#equip-slot-helmet{grid-area:kask}
+#equip-slot-amulet{grid-area:kolye}
+#equip-slot-gloves{grid-area:eldiven}
+#equip-slot-weapon{grid-area:silah}
+#equip-slot-ring{grid-area:yuzuk}
+#equip-slot-boots{grid-area:bot}
+#equip-slot-armor{
+  position:absolute;
+  left:50%;
+  top:43%;
+  width:92px;
+  height:84px;
+  inset:auto;
+  z-index:6;
+  transform:translateX(-50%) translateZ(24px);
+}
+#equip-slot-armor .character-equip-icon{
+  width:58px;
+  height:50px;
+  flex-basis:50px;
+  font-size:38px;
+}
+#equip-slot-armor .knight-armor-icon{
+  width:50px;
+  height:50px;
+  display:block;
+}
+#equip-slot-amulet .character-equip-icon,
+#equip-slot-ring .character-equip-icon{font-size:25px}
+
+@media(max-width:390px){
+  #character-stage{
+    width:88vw;
+    height:118vw;
+    min-height:390px;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-rows:repeat(4,minmax(0,1fr));
+    grid-template-areas:
+      ". kask ."
+      "yuzuk kolye ."
+      "eldiven zirh silah"
+      ". bot ." ;
+    row-gap:24px;
+    padding:8px 4px;
+  }
+  .character-equip-slot{width:80px;height:66px;gap:2px}
+  .character-slot-title{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
+  .character-equip-icon{width:42px;height:38px;flex-basis:38px;font-size:25px}
+  .character-equip-label{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
+  #equip-slot-armor{
+    left:50%;
+    top:43%;
+    width:86px;
+    height:70px;
+    transform:translateX(-50%) translateZ(24px);
+  }
+  #equip-slot-armor .character-equip-icon{width:46px;height:42px;flex-basis:42px}
+  #equip-slot-armor .knight-armor-icon{width:42px;height:42px}
+}
 </style>
 
 
@@ -496,7 +692,7 @@ const RARITIES=[
 {id:4,name:"Kadim",color:"#e67e22",class:"rarity-4",mult:3,prefix:"Kadim "},
 {id:5,name:"İlahi",color:"#f1948a",class:"rarity-5",mult:4,prefix:"🔥 İlahi "}
 ];
-const EQUIP_SLOTS={weapon:{label:"⚔️ Silah"},armor:{label:"🛡️ Zırh"},helmet:{label:"⛑️ Kask"},gloves:{label:"🧤 Eldiven"},boots:{label:"👢 Bot"},amulet:{label:"📿 Kolye"},ring:{label:"💍 Yüzük"}};
+const EQUIP_SLOTS={weapon:{label:"⚔️ Silah"},armor:{label:"🛡️ Zırh"},helmet:{label:"🪖 Kask"},gloves:{label:"🧤 Eldiven"},boots:{label:"👢 Bot"},amulet:{label:"📿 Kolye"},ring:{label:"💍 Yüzük"}};
 const ITEM_TYPES={
 weapon:{name:"Silah",stats:["dmg","crit","critDmg","attackSpeed"]},
 armor:{name:"Zırh",stats:["hp","dmgRed","resist"]},
@@ -4405,109 +4601,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<style id="KRILMA_CHARACTER_GRID_V18_6_FINAL">
-/* v18.6 — Nihai karakter yerleşimi: kesin 3x4 Grid Template Areas. */
-#character-stage{
-  display:grid!important;
-  grid-template-columns:1fr 1fr 1fr!important;
-  grid-template-rows:repeat(4,minmax(0,1fr))!important;
-  grid-template-areas:
-    ". kask ."
-    "yuzuk kolye ."
-    "eldiven zirh silah"
-    ". bot ."!important;
-  column-gap:0!important;
-  row-gap:24px!important;
-  align-items:center!important;
-  justify-items:center!important;
-  padding:12px 6px!important;
-  box-sizing:border-box!important;
-}
-#equip-slot-helmet{grid-area:kask!important}
-#equip-slot-amulet{grid-area:kolye!important}
-#equip-slot-gloves{grid-area:eldiven!important}
-#equip-slot-armor{grid-area:zirh!important}
-#equip-slot-weapon{grid-area:silah!important}
-#equip-slot-ring{grid-area:yuzuk!important}
-#equip-slot-boots{grid-area:bot!important}
-.character-equip-slot{
-  position:relative!important;
-  inset:auto!important;
-  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
-  width:88px!important;
-  height:80px!important;
-  margin:0!important;
-  padding:0!important;
-  transform:none!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  gap:4px!important;
-  align-self:center!important;
-  justify-self:center!important;
-  box-sizing:border-box!important;
-}
-.character-equip-slot:active{transform:scale(.96)!important}
-.character-slot-title{
-  position:static!important;
-  left:auto!important;top:auto!important;
-  transform:none!important;
-  width:100%!important;
-  height:12px!important;
-  margin:0!important;
-  flex:0 0 12px!important;
-  line-height:12px!important;
-  text-align:center!important;
-}
-.character-equip-icon{
-  position:relative!important;
-  left:auto!important;top:auto!important;
-  transform:none!important;
-  width:52px!important;
-  height:46px!important;
-  margin:0!important;
-  flex:0 0 46px!important;
-}
-.character-equip-label{
-  position:static!important;
-  left:auto!important;bottom:auto!important;
-  transform:none!important;
-  width:100%!important;
-  height:12px!important;
-  margin:0!important;
-  flex:0 0 12px!important;
-  line-height:12px!important;
-  text-align:center!important;
-}
-#equip-slot-amulet .character-equip-icon,
-#equip-slot-ring .character-equip-icon{font-size:25px!important}
-#equip-slot-armor{height:84px!important}
-#equip-slot-armor .character-equip-icon{width:58px!important;height:50px!important;flex-basis:50px!important}
-#equip-slot-armor .knight-armor-icon{width:50px!important;height:50px!important;display:block!important}
-@media(max-width:390px){
-  #character-stage{
-    grid-template-columns:1fr 1fr 1fr!important;
-    grid-template-rows:repeat(4,minmax(0,1fr))!important;
-    grid-template-areas:
-    ". kask ."
-    "yuzuk kolye ."
-    "eldiven zirh silah"
-    ". bot ."!important;
-    row-gap:24px!important;
-    padding:8px 4px!important;
-  }
-  .character-equip-slot{width:80px!important;height:66px!important;gap:2px!important}
-  .character-slot-title{height:10px!important;flex-basis:10px!important;line-height:10px!important;font-size:8px!important}
-  .character-equip-icon{width:42px!important;height:38px!important;flex-basis:38px!important;font-size:25px!important}
-  .character-equip-label{height:10px!important;flex-basis:10px!important;line-height:10px!important;font-size:8px!important}
-  #equip-slot-armor{height:70px!important}
-  #equip-slot-armor .character-equip-icon{width:46px!important;height:42px!important;flex-basis:42px!important}
-  #equip-slot-armor .knight-armor-icon{width:42px!important;height:42px!important}
-}
-/* Envanter: zırh ikonu diğer ekipman ikonlarıyla aynı kompakt boyutta. */
-.equip-slot .slot-name .knight-armor-icon{width:22px!important;height:22px!important;vertical-align:middle!important;display:inline-block!important}
-</style>
+
 </body>
 </html>
 <style id="KRILMA_LIGHT_3D_VISUALS_V15_8">/* v15.8 — yalnızca kozmetik CSS 3D katmanı. Oyun mekaniğine dokunmaz. */
@@ -4738,11 +4832,7 @@ window.floatCombatText=function(text,type,nearEnemy=true,source,isCrit){
 })();
 </script>
 
-<style id="KRILMA_DAMAGE_TIMING_V16_6">
-/* v16.6 — Kozmetik zamanlama: saldırı hareketi tamamlandıktan sonra ikincil göstergeleri göster. */
-/* v17.1 — KARAKTER EKRANI / ISKELET */
-#tab-character{padding:8px 0 18px}.character-panel{max-width:520px;margin:0 auto;text-align:center}.character-panel h3{margin:4px 0;color:#f1c40f}.character-subtitle{font-size:11px;color:#8c9ba5;margin:0 0 10px}.character-stage-wrap{perspective:900px;padding:8px 18px 18px;touch-action:none}#character-stage{position:relative;width:min(78vw,330px);height:min(105vw,445px);max-height:445px;min-height:360px;margin:0 auto;border:1px solid #344054;border-radius:14px;background:linear-gradient(165deg,#171d28 0%,#0d1118 58%,#080b10 100%);box-shadow:0 14px 30px rgba(0,0,0,.38),inset 0 0 35px rgba(255,255,255,.025);transform-style:preserve-3d;transition:transform .16s ease-out,box-shadow .16s ease-out;overflow:visible;user-select:none}#character-stage.is-tilting{transition:none;box-shadow:0 18px 36px rgba(0,0,0,.45),inset 0 0 35px rgba(255,255,255,.035)}#char-base-slot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateZ(1px);width:48%;height:68%;border:1px dashed #3b4658;border-radius:12px;background:linear-gradient(180deg,rgba(39,48,64,.5),rgba(10,13,18,.78));display:flex;align-items:center;justify-content:center;box-sizing:border-box;color:#5f6e82;font-size:11px;letter-spacing:.3px;pointer-events:none}#char-base-slot::after{content:'KARAKTER GÖRSELİ';text-align:center;line-height:1.4;max-width:90%}.character-equip-slot{position:absolute;z-index:5;width:58px;height:58px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;box-sizing:border-box;cursor:pointer;transform:translateZ(22px);transition:transform .14s ease,opacity .18s ease}.character-equip-slot:active{transform:translateZ(22px) scale(.94)}.character-equip-slot.empty{opacity:1}.character-equip-icon{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;line-height:1;overflow:visible;font-size:30px;z-index:2}.character-icon-glyph{display:block;line-height:1}.character-equip-label{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8px;color:#7f8b9c;white-space:nowrap;pointer-events:none}.character-equip-slot.empty .character-equip-icon{opacity:.18;filter:grayscale(1)}#equip-slot-helmet{left:50%;top:7%;transform:translateX(-50%) translateZ(22px)}#equip-slot-weapon{right:5%;top:39%;transform:translateZ(22px)}#equip-slot-gloves{left:5%;top:39%;transform:translateZ(22px)}#equip-slot-armor{left:50%;top:40%;transform:translateX(-50%) translateZ(22px)}#equip-slot-amulet{left:50%;top:24%;transform:translateX(-50%) translateZ(30px);width:46px;height:46px}#equip-slot-amulet .character-equip-icon{font-size:22px}#equip-slot-boots{left:50%;bottom:7%;transform:translateX(-50%) translateZ(22px)}#equip-slot-ring{right:4%;bottom:12%;width:46px;height:46px;transform:translateZ(30px)}#equip-slot-ring .character-equip-icon{font-size:22px}.character-spark-zone{position:absolute;left:-12.5%;top:-35%;width:125%;height:170%;overflow:visible;pointer-events:none;z-index:4;contain:layout paint}.character-spark{position:absolute;left:var(--spark-x);bottom:30%;width:2px;height:2px;border-radius:50%;background:currentColor;box-shadow:0 0 4px currentColor,0 0 8px currentColor;transform:translate3d(var(--spark-drift),0,0) scale(.65);opacity:0;will-change:transform,opacity;animation:characterSparkRise var(--spark-dur) ease-out var(--spark-delay) infinite}.character-rarity-1 .character-spark{color:#2ecc71}.character-rarity-2 .character-spark{color:#3498db}.character-rarity-3 .character-spark{color:#9b59b6}.character-rarity-4 .character-spark{color:#e67e22}.character-rarity-5 .character-spark{color:#f1948a;width:2px;height:2px;box-shadow:0 0 3px currentColor,0 0 6px currentColor}.character-rarity-5 .character-spark:nth-child(3n){width:3px;height:3px}.character-rarity-1 .character-spark{animation-duration:3.8s}.character-rarity-2 .character-spark{animation-duration:3.2s}.character-rarity-3 .character-spark{animation-duration:2.7s}.character-rarity-4 .character-spark{animation-duration:2.25s}.character-rarity-5 .character-spark{animation-duration:1.7s}@keyframes characterSparkRise{0%{transform:translate3d(var(--spark-drift),0,0) scale(.65);opacity:0}10%{opacity:.95}28%{transform:translate3d(calc(var(--spark-drift) * .7),-8px,0) scale(1)}58%{opacity:.72}82%{transform:translate3d(calc(var(--spark-drift) * .25),calc(var(--spark-rise) * .78),0) scale(.72);opacity:.35}100%{transform:translate3d(calc(var(--spark-drift) * -.35),var(--spark-rise),0) scale(.15);opacity:0}}@media(prefers-reduced-motion:reduce){.character-spark{animation:none!important;opacity:0!important}}.character-item-popover{position:fixed;z-index:9999;width:min(88vw,310px);background:#151a23;border:1px solid #3b4658;border-radius:10px;padding:10px;box-sizing:border-box;box-shadow:0 14px 30px rgba(0,0,0,.55);text-align:left;display:none}.character-item-popover.show{display:block;animation:charPopIn .14s ease-out}@keyframes charPopIn{from{opacity:0;transform:translateY(5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}.character-popover-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:7px}.character-popover-name{font-size:13px;font-weight:800;line-height:1.25}.character-popover-meta{font-size:9px;color:#8c9ba5;margin-top:3px}.character-popover-stats{font-size:10px;color:#c5ccd5;line-height:1.5;border-top:1px solid #252d3a;padding-top:6px}.character-popover-section{margin-top:6px;padding-top:6px;border-top:1px solid #252d3a;font-size:10px;color:#bdc3c7;line-height:1.45}.character-popover-close{border:0!important;background:#2a3342!important;padding:4px 7px!important;font-size:10px!important;min-width:0!important}.character-note{font-size:9px;color:#5f6e82;margin-top:2px}@media(max-width:390px){#character-stage{width:80vw;height:104vw;min-height:335px}.character-equip-slot{width:52px;height:52px}.character-equip-icon{width:38px;height:38px;font-size:25px}}
-</style>
+
 <script id="KRILMA_DAMAGE_TIMING_JS_V16_6">
 (function(){
 'use strict';
