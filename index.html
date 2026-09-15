@@ -295,9 +295,9 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
 #char-base-slot{
   position:absolute;
   left:50%;
-  top:53%;
-  width:58%;
-  height:82%;
+  top:54%;
+  width:72%;
+  height:94%;
   border:0!important;
   border-radius:0!important;
   background:transparent!important;
@@ -410,7 +410,7 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
   z-index:5;
 }
 .character-icon-glyph{display:block;line-height:1;filter:none!important}
-.knight-armor-icon{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.knight-armor-icon,.helmet-icon{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
 .character-spark-zone{
   position:absolute;
   inset:0;
@@ -499,7 +499,7 @@ select{width:100%;padding:8px;background:#222936;color:#fff;border:1px solid #3b
   .character-equip-slot{width:80px;height:66px;gap:2px}
   .character-slot-title{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
   .character-equip-icon{width:42px;height:38px;flex-basis:38px;font-size:25px}
-  .knight-armor-icon{width:38px;height:38px}
+  .knight-armor-icon,.helmet-icon{width:38px;height:38px}
   .character-equip-label{height:10px;flex-basis:10px;line-height:10px;font-size:8px!important}
 }
 </style>
@@ -705,7 +705,7 @@ const RARITIES=[
 {id:4,name:"Kadim",color:"#e67e22",class:"rarity-4",mult:3,prefix:"Kadim "},
 {id:5,name:"İlahi",color:"#f1948a",class:"rarity-5",mult:4,prefix:"🔥 İlahi "}
 ];
-const EQUIP_SLOTS={weapon:{label:"⚔️ Silah"},armor:{label:"🛡️ Zırh"},helmet:{label:"🪖 Kask"},gloves:{label:"🧤 Eldiven"},boots:{label:"👢 Bot"},amulet:{label:"📿 Kolye"},ring:{label:"💍 Yüzük"}};
+const EQUIP_SLOTS={weapon:{label:"⚔️ Silah"},armor:{label:"🛡️ Zırh"},helmet:{label:"Kask"},gloves:{label:"🧤 Eldiven"},boots:{label:"👢 Bot"},amulet:{label:"📿 Kolye"},ring:{label:"💍 Yüzük"}};
 const ITEM_TYPES={
 weapon:{name:"Silah",stats:["dmg","crit","critDmg","attackSpeed"]},
 armor:{name:"Zırh",stats:["hp","dmgRed","resist"]},
@@ -1231,7 +1231,8 @@ function bulkSellItems(){
  P.gold+=gold;P.inventory=P.inventory.filter(i=>safeNum(i.rarity,0)>max);log(`💰 <b>Toplu satış:</b> ${count} eşya satıldı! +${gold} Altın`);updateUI();renderInventory();renderCombatConsumables();saveGame()}
 /* v17.1 — Karakter ekranı: yalnızca mevcut ekipman verisini okur. */
 function knightArmorIcon(){return '<svg class="knight-armor-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M16 11h32l3 9-5 4v25l-14 8-14-8V24l-5-4 3-9Z" fill="#9aa8b7" stroke="#dce5ee" stroke-width="2"/><path d="M19 25h26v21l-13 7-13-7V25Z" fill="#687889"/><path d="M32 25v28M19 25l13 7 13-7M23 17h18" fill="none" stroke="#e8eef5" stroke-width="2" stroke-linecap="round"/><path d="M12 18l7 4M52 18l-7 4" stroke="#dce5ee" stroke-width="3" stroke-linecap="round"/><circle cx="25" cy="35" r="1.6" fill="#f1c40f"/><circle cx="39" cy="35" r="1.6" fill="#f1c40f"/></svg>'}
-function characterSlotIcon(slot){if(slot==='armor')return knightArmorIcon();const label=EQUIP_SLOTS[slot]?.label||'';const m=label.match(/^\s*(\S+)/);return m?m[1]:'⬡'}
+function helmetIcon(){return '<svg class="helmet-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M13 35c0-14 8-24 19-24s19 10 19 24v12H13V35Z" fill="#8797a8" stroke="#e4edf5" stroke-width="2"/><path d="M18 34h28v10H18Z" fill="#536475" stroke="#d6e0e9" stroke-width="2"/><path d="M32 12v22M22 23h20M19 47h26" fill="none" stroke="#f1f5f8" stroke-width="2" stroke-linecap="round"/><path d="M14 35H8m42 0h6M24 11l3-5h10l3 5" fill="none" stroke="#d6e0e9" stroke-width="3" stroke-linecap="round"/></svg>'}
+function characterSlotIcon(slot){if(slot==='armor')return knightArmorIcon();if(slot==='helmet')return helmetIcon();const label=EQUIP_SLOTS[slot]?.label||'';const m=label.match(/^\s*(\S+)/);return m?m[1]:'⬡'}
 function characterClosePopover(){const p=document.getElementById('character-item-popover');if(p)p.classList.remove('show')}
 function characterShowItem(slot,el){const item=P?.equipment?.[slot];if(!item){characterClosePopover();return}const r=RARITIES[item.rarity]||RARITIES[0];let pop=document.getElementById('character-item-popover');if(!pop){pop=document.createElement('div');pop.id='character-item-popover';pop.className='character-item-popover';document.body.appendChild(pop)}const stats=formatEquipmentStats(item)||'Ek özellik yok';const setHtml=item.setId&&ITEM_SETS[item.setId]?`<div class="character-popover-section">${ITEM_SETS[item.setId].icon} <b>${ITEM_SETS[item.setId].name}</b></div>`:'';const passiveHtml=item.passive?`<div class="character-popover-section"><b style="color:#f1c40f">✨ ${item.passive.name}</b><br>${item.passive.desc}</div>`:'';pop.innerHTML=`<div class="character-popover-head"><div><div class="character-popover-name" style="color:${r.color}">${item.name}</div><div class="character-popover-meta">${r.name} · ${ITEM_TYPES[item.type]?.name||item.type} · Lv.${item.level||1}</div></div><button class="character-popover-close" onclick="characterClosePopover()">✕</button></div><div class="character-popover-stats"><b>📊 Özellikler</b><br>${stats}</div>${setHtml}${passiveHtml}`;pop.classList.add('show');const rect=el.getBoundingClientRect();pop.style.left=Math.max(8,Math.min(window.innerWidth-pop.offsetWidth-8,rect.left+rect.width/2-pop.offsetWidth/2))+'px';pop.style.top=Math.min(window.innerHeight-pop.offsetHeight-8,rect.bottom+8)+'px';if(parseFloat(pop.style.top)<8)pop.style.top=Math.max(8,rect.top-pop.offsetHeight-8)+'px';pop.classList.add('show')}
 function characterSparkCount(level){const n=Number(level);return Number.isFinite(n)?Math.max(0,Math.floor(n)):0}
@@ -1940,7 +1941,7 @@ function sellCraftedSkill(idx){
  let sk=P.craftedSkills[idx];if(!sk)return;P.equippedCrafted=P.equippedCrafted.map(x=>x&&String(x.uid)===String(sk.uid)?null:x);P.gold+=sk.sellPrice;P.craftedSkills.splice(idx,1);log(`💰 <b>${sk.name}</b> satıldı! +${sk.sellPrice} Altın`);updateCraftUI();updateSkillButtons();saveGame()
 }
 function renderInventory(){
- let eq=document.getElementById('equip-slots');eq.innerHTML='';for(let slot in EQUIP_SLOTS){let item=P.equipment[slot],d=document.createElement('div');d.className='equip-slot '+(item?'':'empty');if(item){let r=RARITIES[item.rarity]||RARITIES[0],st=formatEquipmentStats(item);d.innerHTML=`<div class="slot-name">${slot==='armor'?knightArmorIcon():EQUIP_SLOTS[slot].label}</div><div class="item-name" style="color:${r.color}">${item.name}</div><div class="item-stat">${item.setId&&ITEM_SETS[item.setId]?ITEM_SETS[item.setId].icon+" "+ITEM_SETS[item.setId].name+" · ":""}Lv.${item.level||1} · ${st}</div>`;d.onclick=()=>unequipItem(slot)}else d.innerHTML=`<div class="slot-name">${slot==='armor'?knightArmorIcon():EQUIP_SLOTS[slot].label}</div><div>Boş</div>`;eq.appendChild(d)}
+ let eq=document.getElementById('equip-slots');eq.innerHTML='';for(let slot in EQUIP_SLOTS){let item=P.equipment[slot],d=document.createElement('div'),slotIcon=slot==='armor'?knightArmorIcon():slot==='helmet'?helmetIcon():EQUIP_SLOTS[slot].label;d.className='equip-slot '+(item?'':'empty');if(item){let r=RARITIES[item.rarity]||RARITIES[0],st=formatEquipmentStats(item);d.innerHTML=`<div class="slot-name">${slotIcon}</div><div class="item-name" style="color:${r.color}">${item.name}</div><div class="item-stat">${item.setId&&ITEM_SETS[item.setId]?ITEM_SETS[item.setId].icon+" "+ITEM_SETS[item.setId].name+" · ":""}Lv.${item.level||1} · ${st}</div>`;d.onclick=()=>unequipItem(slot)}else d.innerHTML=`<div class="slot-name">${slotIcon}</div><div>Boş</div>`;eq.appendChild(d)}
  let bag=document.getElementById('inv-bag-grid');bag.innerHTML='';document.getElementById('inv-count').innerText=P.inventory.length;
  for(let i=0;i<24;i++){let d=document.createElement('div'),item=P.inventory[i];d.className='inv-bag-slot '+(item?'':'empty');if(item){let r=RARITIES[item.rarity]||RARITIES[0],qty=item.type==='consumable'?Math.max(1,safeNum(item.quantity,1)):1,st=item.type==='consumable'?item.desc:formatEquipmentStats(item);d.style.borderColor=r.color;d.innerHTML=`<div class="bag-item-name" style="color:${r.color}">${item.name}</div><div class="bag-item-type">${item.setId&&ITEM_SETS[item.setId]?ITEM_SETS[item.setId].icon+" "+ITEM_SETS[item.setId].name+" · ":""}${ITEM_TYPES[item.type]?.name||item.type}</div><div class="bag-item-stat">${st}</div>${item.type==='consumable'?`<span class="stack-count">x${qty}</span>`:''}`;d.onclick=()=>showItemDetail(item.uid);d.ondblclick=()=>equipItem(item.uid)}else d.innerHTML='Boş';bag.appendChild(d)}
  document.getElementById('item-detail-panel').style.display='none';populateBulkSellRarity();updateBulkSellInfo()
